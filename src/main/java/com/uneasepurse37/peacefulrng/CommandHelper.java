@@ -27,9 +27,9 @@ public class CommandHelper {
 		
 		LiteralArgumentBuilder<CommandSourceStack> status = Commands.literal("status").executes(context -> status(context));
 		
-		LiteralArgumentBuilder<CommandSourceStack> toggleprng = Commands.literal("toggleprng").executes(context -> toggleprng(context)).then(rawchicken).then(rottenflesh).then(poisonouspotato).then(on).then(off).then(status);
+		LiteralArgumentBuilder<CommandSourceStack> peacefulrng = Commands.literal("peacefulrng").executes(context -> peacefulrng(context)).then(rawchicken).then(rottenflesh).then(poisonouspotato).then(on).then(off).then(status);
 		
-		dispatcher.register(toggleprng);
+		dispatcher.register(peacefulrng);
 		
 		
 	}
@@ -191,7 +191,7 @@ public class CommandHelper {
 		return 0;
 	}
 	
-	private static int toggleprng(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+	private static int peacefulrng(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		
 		
 		boolean flag = PeacefulRNG.toggledchicken || PeacefulRNG.toggledflesh || PeacefulRNG.toggledpotato;
