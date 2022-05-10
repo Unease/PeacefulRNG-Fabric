@@ -21,7 +21,13 @@ public class CommandHelper {
 		
 		LiteralArgumentBuilder<CommandSourceStack> poisonouspotato = Commands.literal("poisonouspotato").executes(context -> poisonouspotato(context));
 		
-		LiteralArgumentBuilder<CommandSourceStack> toggleprng = Commands.literal("toggleprng").executes(context -> toggleprng(context)).then(rawchicken).then(rottenflesh).then(poisonouspotato);
+		LiteralArgumentBuilder<CommandSourceStack> on = Commands.literal("on").executes(context -> on(context));
+		
+		LiteralArgumentBuilder<CommandSourceStack> off = Commands.literal("off").executes(context -> off(context));
+		
+		LiteralArgumentBuilder<CommandSourceStack> status = Commands.literal("status").executes(context -> status(context));
+		
+		LiteralArgumentBuilder<CommandSourceStack> toggleprng = Commands.literal("toggleprng").executes(context -> toggleprng(context)).then(rawchicken).then(rottenflesh).then(poisonouspotato).then(on).then(off).then(status);
 		
 		dispatcher.register(toggleprng);
 		
@@ -32,15 +38,26 @@ public class CommandHelper {
 		PeacefulRNG.toggledchicken = !PeacefulRNG.toggledchicken;
 		
 		if (PeacefulRNG.isTASMODLoaded) {
+			if(!PeacefulRNG.toggledflesh && PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.YELLOW + " off!"), false);
+			} else if (PeacefulRNG.toggledflesh && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.GOLD + " on!"), false);
+			}
+			
 			if (!PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato && PeacefulRNG.toggledflesh) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is"+ ChatFormatting.LIGHT_PURPLE + " off!"), false);
 			} else if (PeacefulRNG.toggledchicken && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is" + ChatFormatting.DARK_PURPLE + " on!"), false);
 			} 
 			
-			if (PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh && PeacefulRNG.toggledpotato) {
-				context.getSource().sendSuccess(
-						new TextComponent(ChatFormatting.GRAY + "Everything is toggled" + ChatFormatting.RED + " on!"),false);
+			if (!PeacefulRNG.toggledpotato && PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.GREEN + " off!"), false);
+			} else if (PeacefulRNG.toggledpotato && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.DARK_GREEN + " on!"), false);
+			}
+			
+			if (PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled" + ChatFormatting.RED + " on!"), false);
 			} else if (!PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh && !PeacefulRNG.toggledpotato) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled" + ChatFormatting.BLUE + " off!"), false);
 			}
@@ -59,6 +76,19 @@ public class CommandHelper {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.GOLD + " on!"), false);
 			}
 			
+			if (!PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is"+ ChatFormatting.LIGHT_PURPLE + " off!"), false);
+			} else if (PeacefulRNG.toggledchicken && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is" + ChatFormatting.DARK_PURPLE + " on!"), false);
+			} 
+			
+			if (!PeacefulRNG.toggledpotato && PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.GREEN + " off!"), false);
+			} else if (PeacefulRNG.toggledpotato && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.DARK_GREEN + " on!"), false);
+			} 
+			
+			
 			if (PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh && PeacefulRNG.toggledpotato) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.RED + " on!"), false);
 			} else if (!PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh && !PeacefulRNG.toggledpotato) {
@@ -73,12 +103,82 @@ public class CommandHelper {
 	private static int poisonouspotato(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		PeacefulRNG.toggledpotato = !PeacefulRNG.toggledpotato;
 		
-		if (FabricLoader.getInstance().isModLoaded("lotas") || FabricLoader.getInstance().isModLoaded("tasmod")) {
+		if (PeacefulRNG.isTASMODLoaded) {
+			if(!PeacefulRNG.toggledflesh && PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.YELLOW + " off!"), false);
+			} else if (PeacefulRNG.toggledflesh && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.GOLD + " on!"), false);
+			}
+			
+			if (!PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is"+ ChatFormatting.LIGHT_PURPLE + " off!"), false);
+			} else if (PeacefulRNG.toggledchicken && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is" + ChatFormatting.DARK_PURPLE + " on!"), false);
+			} 
+			
 			if (!PeacefulRNG.toggledpotato && PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.GREEN + " off!"), false);
 			} else if (PeacefulRNG.toggledpotato && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.DARK_GREEN + " on!"), false);
+			}
+				
+			if (PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh && PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.RED + " on!"), false);
+			} else if (!PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh && !PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.BLUE + " off!"), false);
+			}
+		}
+
+		
+		return 0;
+	}
+	
+	private static int on(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+		
+		boolean flag = !PeacefulRNG.toggledchicken || !PeacefulRNG.toggledflesh || !PeacefulRNG.toggledpotato;
+		
+		PeacefulRNG.toggledchicken = !flag;
+		PeacefulRNG.toggledflesh = !flag;
+		PeacefulRNG.toggledpotato = !flag;
+		
+		context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.RED + " on!"), false);
+		return 0;
+		
+	}
+	
+	private static int off(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+		
+		boolean flag = PeacefulRNG.toggledchicken || PeacefulRNG.toggledflesh || PeacefulRNG.toggledpotato;
+		
+		PeacefulRNG.toggledchicken = !flag;
+		PeacefulRNG.toggledflesh = !flag;
+		PeacefulRNG.toggledpotato = !flag;
+		
+		context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.BLUE + " off!"), false);
+		return 0;
+		
+	}
+	
+	private static int status(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+		
+		if (PeacefulRNG.isTASMODLoaded) {
+			if(!PeacefulRNG.toggledflesh && PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.YELLOW + " off!"), false);
+			} else if (PeacefulRNG.toggledflesh && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledpotato) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only rotten flesh is"+ ChatFormatting.GOLD + " on!"), false);
+			}
+			
+			if (!PeacefulRNG.toggledchicken && PeacefulRNG.toggledpotato && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is"+ ChatFormatting.LIGHT_PURPLE + " off!"), false);
+			} else if (PeacefulRNG.toggledchicken && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only raw chicken is" + ChatFormatting.DARK_PURPLE + " on!"), false);
 			} 
+			
+			if (!PeacefulRNG.toggledpotato && PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.GREEN + " off!"), false);
+			} else if (PeacefulRNG.toggledpotato && !PeacefulRNG.toggledchicken && !PeacefulRNG.toggledflesh) {
+				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Only poisonous potatoes are"+ ChatFormatting.DARK_GREEN + " on!"), false);
+			}
 				
 			if (PeacefulRNG.toggledchicken && PeacefulRNG.toggledflesh && PeacefulRNG.toggledpotato) {
 				context.getSource().sendSuccess(new TextComponent(ChatFormatting.GRAY + "Everything is toggled"+ ChatFormatting.RED + " on!"), false);
