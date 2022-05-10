@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "peacefulrng",
+	"version": "${version}",
+	"name": "PeacefulRNG",
+	"description": "Adds options to toggle certain status effects from consumables.",
+	"authors": [
+		"Unease"
+	],
+	"contact": {
+
+	},
+	"license": "GPLv3",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.uneasepurse37.peacefulrng.PeacefulRNG"
+		],
+		"client": [
+			
+		]
+	},
+	"mixins": [
+		"peacefulrng.mixin.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.13.3",
+		"minecraft": "1.16.1",
+		"java": ">=8"
+	}
+}

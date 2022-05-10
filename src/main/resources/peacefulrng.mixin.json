@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.uneasepurse37.peacefulrng.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+	"MixinFood",
+	"MixinCommands"
+	],
+	"client": [
+	"MixinIngameGui"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

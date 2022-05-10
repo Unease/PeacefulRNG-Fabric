@@ -1,0 +1,48 @@
+/* Add Plugins required for PeacefulRNG */
+plugins {
+	// Add Fabric-Loom plugin for the fabric modloader
+	id 'fabric-loom' version '0.11-SNAPSHOT'
+}
+
+
+// Update basic properties from gradle.properties
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+/* Add Repositories required for PeacefulRNG */
+repositories {
+	// Add the MGNetwork maven server.
+	maven { url 'https://maven.mgnet.work' }
+	maven { url 'https://maven.parchmentmc.org' }
+}
+
+/* Add Dependencies for PeacefulRNG */
+dependencies {
+	// Add minecraft, mappings and fabric loader with versions from gradle.properties
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment "org.parchmentmc.data:parchment-${project.parchment_mcversion}:${project.parchment_mappings}@zip"
+	}
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+/* Add some preprocessing to the resources */
+processResources {
+	// Update the version string in the fabric.mod.json file
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+
+/* Add some post processing to the final jar file */
+jar {
+	// Add the LICENSE to the final jar
+	from("LICENSE.md") {
+		rename { "LICENSE_${project.archivesBaseName}"}
+	}
+}

@@ -1,0 +1,13 @@
+# Exclude build folders
+bin/
+build/
+
+# Exclude more stuff
+run/
+*.launch
+
+# Exclude project files
+.classpath
+.settings
+.gradle
+.project
